@@ -48,13 +48,12 @@ def main():
     learning_rate = 0.01
     for i in range(1,batch):
         l = run_optimization(w1,w2,b)
-        print((i,l,w1,w2,b))
         if l < 0.01:
-            #print((i,w1,w2,b))
+            print([i,w1,w2,b,l])
             break
         g = grad(w1,w2,b)
         w1 -= learning_rate * g[0]
         w2 -= learning_rate * g[1]
         b  -= learning_rate * g[2]
 
-main()        
+main()
