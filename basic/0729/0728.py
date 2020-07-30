@@ -6,7 +6,7 @@ from activate import sigmoid_df as DFx
 from activate import relu_fx as Fx
 from activate import relu_df as DFx
 
-batch = 500
+batch = 1000
 learning_rate = 0.01
 
 def fx(x,w,b):
@@ -20,8 +20,8 @@ def grad(x,w,b,loss):
     n_sample = x.shape[0]
     df = DFx(fx(x,w,b))
     dv = np.column_stack((x,np.ones(n_sample)))
-    print(np.dot(loss*df,dv))
-    return np.dot(loss*df,dv)
+    g = np.dot(loss*df,dv)
+    return g / n_sample
 
 def main():
     x = np.array(
@@ -31,10 +31,15 @@ def main():
     y = np.array([5.5,8.7,11.9])
     n_sample = x.shape[0]
     n_feature = x.shape[1]
-    #theta = np.random.rand(n_feature+1)
+    '''
+    theta_H1 = np.random.rand(n_feature+1)
+    theta_H2 = np.random.rand(n_feature+1)
+    thet_o = np.random.rand(n_feature+1)
+    '''
     theta_H1 = np.array([1,1,-0.5])
     theta_H2 = np.array([1,1,-0.5])
     thet_o = np.array([1,1,-0.5])
+    
     w_H1 = theta_H1[0:n_feature]
     b_H1 = theta_H1[n_feature]
     w_H2 = theta_H2[0:n_feature]
@@ -47,19 +52,23 @@ def main():
         H2 = fx(x,w_H2,b_H2)
         H = np.column_stack((H1,H2))
         o = fx(H,w_o,b_o)
-        loss_o =  sum(loss(o-y)) / n_sample
-        loss_H = w_o * loss_o
+        loss_o = loss(o-y)
+        delta = o-y
+        Loss_o = sum(loss(delta)) / n_sample
+        loss_H = []
+        for hiden_w in w_o:
+            loss_H.append(hiden_w * delta)
 
-        if loss_o < 0.01:
+        if Loss_o < 0.001:
             return
         g_H1 = grad(x,w_H1,b_H1,loss_H[0])
         g_H2 = grad(x,w_H2,b_H2,loss_H[1])
-        g_o = grad(H,w_o,b_o,loss_o)
+        g_o = grad(H,w_o,b_o,delta)
         #grad = 节点误差*节点导数*输入特征
-        print(loss_o,g_H1,g_H2,g_o)
-        delta_g_H1 = g_H1 * learning_rate
-        delta_g_H2 = g_H2 * learning_rate
-        delta_g_o = g_o * learning_rate
+        print(Loss_o,g_H1,g_H2,g_o)
+        delta_g_H1 = -g_H1 * learning_rate
+        delta_g_H2 = -g_H2 * learning_rate
+        delta_g_o = -g_o * learning_rate
         w_H1 = w_H1 + delta_g_H1[0:n_sample-2]
         b_H1 = b_H1 + delta_g_H1[n_sample-1]
         w_H2 = w_H2 + delta_g_H2[0:n_sample-2]
