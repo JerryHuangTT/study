@@ -12,5 +12,6 @@ def sigmoid_df(x):
 def relu_df(x):
     dZ = np.array(x, copy=True)
     dZ[x <= 0] = 0
+    dZ[x > 0] = 1
     assert(dZ.shape == x.shape) #确保维度相同
     return dZ
