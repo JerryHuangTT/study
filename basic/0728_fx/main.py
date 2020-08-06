@@ -9,9 +9,12 @@ from activate import relu_df as DFx
 X = np.array(
     [[1,2],
     [2,3],
-    [3,4]])
-Y = np.array([5.5,8.7,11.9])
-batch = 1000
+    [3,4],
+    [4,5],
+    [5,6],
+    [6,7]])
+Y = np.array([5,8,11,14,17,20])
+batch = 5000
 learning_rate = 0.01
 
 def fx(x,w,b):
@@ -27,8 +30,7 @@ def grad(x,w,b,delta):
     dv = np.column_stack((x,np.ones(n_sample)))
     return np.dot(delta*df,dv) / n_sample
 
-def main(x,y):
-    n_sample = x.shape[0]
+def run_optimization(x,y):
     n_feature = x.shape[1]
     #theta = np.array([1,1,-0.5])
     theta = np.random.rand(n_feature+1)
@@ -36,15 +38,18 @@ def main(x,y):
     b = theta[n_feature]
     for i in range(1,batch):
         delta = fx(x,w,b) - y
-        Loss = sum(loss(delta)) / n_sample
-        if Loss < 0.001:
-            print(i,Loss,w,b)
-            return
+        Loss = sum(loss(delta)) / x.shape[0]
+        if Loss < 0.00001:
+            print(i)
+            return [w,b]
         else:
             g = grad(x,w,b,delta)
-            #print(Loss,g)
+            #print(i,Loss,g)
             delta_g = -g * learning_rate
-            w = w + delta_g[0:n_sample-2]
-            b = b + delta_g[n_sample-1]        
+            w = w + delta_g[0:n_feature]
+            b = b + delta_g[n_feature]   
+    return [w,b]             
 
-main(X,Y)
+w,b = run_optimization(X,Y)
+y_pred = fx(X,w,b)
+print(y_pred-Y)
