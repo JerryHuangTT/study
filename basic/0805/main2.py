@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 iris = []
 target = []
@@ -27,6 +27,8 @@ def softmax(x_train,y_train):
         O = H_soft / H_soft.sum(axis=1).reshape(n_sample,1) 
         grad = X.T.dot(O-y_train)
         H_theta -= learning_rate * grad
+        print( (np.log(O) * y_train).shape)
+        print( (np.log(O) * y_train).sum())
         cost = -(np.log(O) * y_train).sum() / n_sample
         if i in range(0,max_iter,200):
             a = 0
@@ -53,9 +55,3 @@ def to_label(indexs):
 theta = softmax(iris,target)
 pred = pred(iris,theta)
 res = to_label(pred.argmax(axis=1))
-
-
-print('模型在测试数据上的错误率为{:.2f}%'.format(float(sum(abs(pred.argmax(axis=1)-target.argmax(axis=1)))/150)*100)) 
-plt.plot([item[0] for item in error[2:]],[item[1]for item in error[2:]])
-plt.title('cost-iteration')
-plt.show()
