@@ -1,6 +1,8 @@
 # encoding=utf-8
 # -*- coding : utf-8-*-
 # coding:unicode_escape
+print(1)
+
 __author__ = '徐贝贝'
 import time
 import pandas as pd
