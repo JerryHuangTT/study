@@ -1,7 +1,5 @@
-from tensorflow.keras.datasets import mnist
 import tensorflow as tf
 from tensorflow.keras import Model, layers
-
 import pandas as pd
 import numpy as np
 from imblearn.over_sampling import SMOTE
@@ -9,13 +7,9 @@ from imblearn.over_sampling import SMOTE
 num_classes = 0
 def load_data():
     global num_classes
-    data = pd.read_excel('tf2\\classification\\0812\\pump.xlsx')
-    num_classes = data['type'].value_counts().shape[0]
-    i = 0
-    for l in data['type'].value_counts().index:
-        data.loc[data['type'] == l] = i
-        i += 1
-    print(data['type'].value_counts())    
+    data = pd.read_csv('tf2\\classification\\0814\\pump.csv')
+    print(data['type'].value_counts())   
+    num_classes = data['type'].value_counts().shape[0]   
     train_data = data.sample(frac=0.7,random_state=None)
     test_data = data.drop(train_data.index)
 
@@ -40,14 +34,13 @@ def parse_data():
     return (x_train, y_train), (x_test, y_test)
 
 (x_train, y_train), (x_test, y_test) = parse_data()
-n_hidden_1 = 64 # 1st layer number of neurons.
-n_hidden_2 = 64  # 2nd layer number of neurons.
-n_hidden_3 = 32 # 2nd layer number of neurons.
-#num_classes = x_train.shape[1] * x_train.shape[2]
+n_hidden_1 = 256 # 1st layer number of neurons.
+n_hidden_2 = 256  # 2nd layer number of neurons.
+n_hidden_3 = 128 # 2nd layer number of neurons.
 learning_rate = 0.001
+epoch = 20000
 train_data = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-train_data = train_data.repeat().batch(512).prefetch(1)
-#train_data = train_data.repeat().shuffle(5000).batch(256).prefetch(1)
+train_data = train_data.shuffle(10000).batch(256).repeat(epoch)
 
 class NeuralNet(Model):
     def __init__(self):
@@ -83,7 +76,7 @@ def accuracy(y_pred, y_true):
 
 optimizer = tf.optimizers.SGD(learning_rate)
 
-for i, (x, y) in enumerate(train_data.take(20000), 1):
+for i, (x, y) in enumerate(train_data.take(epoch), 1):
     with tf.GradientTape() as g:
         pred = neural_net(x, is_training=True)
         loss = cross_entropy_loss(pred, y)
