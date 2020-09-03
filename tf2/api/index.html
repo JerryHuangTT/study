@@ -1,0 +1,34 @@
+<body>
+    <fieldset id="field">
+          <legend>表单</legend>
+          <div>
+            直接点击"请求"按钮,请求当天的爱词霸今日一句
+          </div>
+          <div id="requestWay">
+            <input type="radio" name="requestWay" value="GET" id="get"><label for="get">Get方式请求</label> <br />
+            <input type="radio" name="requestWay" value="POST" id="post"><label for="post">Post方式请求</label>
+          </div>
+          <p>
+            <button id="btn">请求</button>
+          </p>
+        </fieldset>
+    </body>
+    <script>
+    var type = "";
+        var baseUrl ="http://localhost:8888"
+        $("#btn").click(function(){
+          type = $('input:radio:checked').val() || "get";
+          $.ajax({
+            url: "http://127.0.0.1:8080/user/jerry", // 在公司局域网只能用本机iP(后端flask设置host=0.0.0.0的情况下),使用127.0.0.1或者0.0.0.0或者localhost都报错-找不到路径
+            data:{},
+            type: type,
+            // dataType: "JSON",
+            success:function(res){
+              console.log(res)
+            },
+            error: function(xhr){
+              console.log(xhr)
+            }
+          })
+        })
+    </script>

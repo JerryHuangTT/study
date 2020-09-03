@@ -1,2 +1,5 @@
 # study
-personal study on tf2
+personal study on tensorflow2
+mysql
+flask
+restful API
