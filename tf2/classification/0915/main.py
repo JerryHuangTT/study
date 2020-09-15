@@ -16,7 +16,7 @@ num_feature = 0
 
 def load_data():
     global num_class,num_feature
-    data = pd.read_csv('tf2\\classification\\0824\\pump.csv')
+    data = pd.read_csv('pump.csv')
     print(data['type'].value_counts())
     num_class = data['type'].value_counts().shape[0]
     train_data = data.sample(frac=0.7,random_state=None)
@@ -51,8 +51,8 @@ h3_l = tf.keras.layers.Dense(16, activation=tf.nn.relu,name='h3_1')(h2_l)
 output_y = tf.keras.layers.Dense(num_class, activation=tf.nn.softmax,name='output_y')(h3_l)
 model = tf.keras.Model(inputs=input_x,outputs=output_y)
 
-model.compile(optimizer=tf.optimizers.Adam(1e-3),
-                loss=tf.losses.categorical_crossentropy,
+model.compile(optimizer=tf.train.AdamOptimizer(1e-3),
+                loss='categorical_crossentropy',
                 metrics=['acc'])
 model.fit(x=x_train,y=y_train,
             batch_size=128,epochs=50)
