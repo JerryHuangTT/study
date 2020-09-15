@@ -2,6 +2,11 @@ import threading
 import time
 import sql1,sql2
 
+import numpy as np 
+
+a= 2 * np.arange(10 // 2) 
+#a= np.arange()
+
 sql1.connnect()
 sql2.connnect()
 

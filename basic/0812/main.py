@@ -37,10 +37,9 @@ def load_data():
     return train_data,test_data
 
 def one_hot(data):
-    #x = data.iloc[:,0:data.shape[1]-1]
     data['type'] = data['type'].astype('object')
-    print(data['type'].value_counts())
-    data_dummies = pd.get_dummies(data)
+    print(data['type'].value_counts().sort_index())
+    data_dummies = pd.get_dummies(data,prefix=['jerry'],columns=['type'])
     print(list(data_dummies.columns))
     return data_dummies
 
