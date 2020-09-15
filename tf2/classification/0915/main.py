@@ -1,14 +1,13 @@
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
+import tensorflow as tf
 import numpy as np
-
-new_model = tf.keras.models.load_model('no_smote_no_normal.h5',compile=False)
+'''
+new_model = tf.keras.models.load_model('no_smote_no_normal.h5')
 record = np.array([[-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146],
 [-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146]])
 res = new_model.predict(record)
 rel = res.argmax(axis=1)#tf.argmax(res,axis=-1)
 print(rel)
-
+'''
 import pandas as pd
 from imblearn.over_sampling import SMOTE
 
@@ -52,10 +51,10 @@ h3_l = tf.keras.layers.Dense(16, activation=tf.nn.relu,name='h3_1')(h2_l)
 output_y = tf.keras.layers.Dense(num_class, activation=tf.nn.softmax,name='output_y')(h3_l)
 model = tf.keras.Model(inputs=input_x,outputs=output_y)
 
-model.compile(optimizer=tf.train.AdamOptimizer(1e-3),
-                loss='categorical_crossentropy',
+model.compile(optimizer=tf.optimizers.Adam(1e-3),
+                loss=tf.losses.categorical_crossentropy,
                 metrics=['acc'])
 model.fit(x=x_train,y=y_train,
             batch_size=128,epochs=50)
 score = model.evaluate(x_test,y_test)
-model.save('no_smote_no_normal.h5')
+model.save('tf2_no_smote_no_normal.h5')
