@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: gg lambda
+
+# s3 shpentairdevelop gg
+Globals:
+  Function:
+    Runtime: python3.7  
+    MemorySize: 128     
+    Timeout: 3
+
+Resources:
+  sample:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: sample/
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws-cn:iam::965691253049:role/sh_pentair_develop_role
+  infer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: infer/
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws-cn:iam::965691253049:role/sh_pentair_develop_role
+
+# s3 shpentairdevelop gg
