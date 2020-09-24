@@ -6,7 +6,6 @@ def open():
     global ser
     if not ser or not ser.is_open:
         ser = serial.Serial("/dev/ttyAMA0", 115200)
-    return ser
 
 def get():
     count = ser.inWaiting()

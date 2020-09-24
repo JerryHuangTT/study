@@ -1,11 +1,9 @@
 import tensorflow as tf
 import numpy as np
 
-def main():
-    model = tf.keras.models.load_model('greengrass\\infer\\tf1_no_smote_no_normal.h5')
-    record = np.array([[-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146],
-    [-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146]])
+def main(data):
+    model = tf.keras.models.load_model('tf1_no_smote_no_normal.h5',compile=False)
+    record = np.array(data)
     res = model.predict(record)
-    rel = res.argmax(axis=1)
-    print(rel)
+    rel = res.argmax(axis=1).tolist()
     return rel
