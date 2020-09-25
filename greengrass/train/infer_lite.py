@@ -1,22 +1,31 @@
-import datetime as dt
-print('start import\t{}'.format(dt.datetime.now()))
 import tflite_runtime.interpreter as tflite
 import numpy as np
 
-input_data = np.array([[-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146]],dtype=np.float32)
-#[-0.075197596,0.093203514,0.375011389,-0.017456585,0.85573888,0.925443146]],dtype=np.float32)
-print('start load\t{}'.format(dt.datetime.now()))
-interpreter = tflite.Interpreter(model_path="greengrass\\train\\tflite_no_smote_no_normal.tflite")
+interpreter = tflite.Interpreter(model_path="tflite_no_smote_no_normal.tflite")
 interpreter.allocate_tensors()
-
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-interpreter.set_tensor(input_details[0]['index'], input_data)
-print('start infer\t{}'.format(dt.datetime.now()))
-interpreter.invoke()
-print('end infer\t{}'.format(dt.datetime.now()))
+def main(x_test,y_test):
+    x_test = x_test.astype(np.float32)
+    i = 0
+    acc = 0 
+    for x in x_test:
+        x = x.reshape(x.shape[0],1).T
+        y_infer = infer_once(x)
 
-output_data = interpreter.get_tensor(output_details[0]['index'])
-res = output_data.argmax(axis=1).tolist()
-print(res)
+        y = y_test[i]
+        y = y.reshape(y.shape[0],1).T
+        y = y.argmax(axis=1).tolist()[0]
+        if y_infer == y:
+            acc += 1
+        i += 1
+    acc /= y_test.shape[0]   
+    return acc
+
+def infer_once(input):
+    interpreter.set_tensor(input_details[0]['index'], input)
+    interpreter.invoke()
+    output_data = interpreter.get_tensor(output_details[0]['index'])
+    res = output_data.argmax(axis=1).tolist()
+    return res[0]

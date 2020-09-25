@@ -48,9 +48,15 @@ model.compile(optimizer=tf.optimizers.Adam(1e-3),
                 metrics=['acc'])
 model.fit(x=x_train,y=y_train,
             batch_size=128,epochs=50)
+print('start evaluate')
 score = model.evaluate(x_test,y_test)
-
 model.save('tf2_no_smote_no_normal.h5')
+
+
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 tflite_model = converter.convert()
 open('tflite_no_smote_no_normal.tflite', 'wb').write(tflite_model)
+
+import infer_lite
+acc = infer_lite.main(x_test,y_test)
+print(acc)
