@@ -14,4 +14,4 @@ def main(data):
 
     output_data = interpreter.get_tensor(output_details[0]['index'])
     res = output_data.argmax(axis=1).tolist()
-    return res
+    return res[0]

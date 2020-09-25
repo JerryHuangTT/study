@@ -18,7 +18,7 @@ def parse(rx_str):
     data = []
     str_array = rx_str.split('\r\n')
     for str in str_array:
-        row = [int(i) for i in (str.split(','))]
+        row = [float(i) for i in (str.split(','))]
         data.append(row)
     return data    
 
