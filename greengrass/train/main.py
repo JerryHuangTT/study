@@ -50,6 +50,3 @@ model.fit(x=x_train,y=y_train,
             batch_size=128,epochs=50)
 score = model.evaluate(x_test,y_test)
 model.save('tf1_no_smote_no_normal.h5')
-
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
-tflite_model = converter.convert()
