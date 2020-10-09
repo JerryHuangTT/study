@@ -22,7 +22,7 @@ def main():
             #client.publish(topic="hello/model",queueFullPolicy="AllOrException",payload=results_str)
     except Exception as e:
         logger.error("Failed to publish message: " + repr(e))
-    Timer(0.003, main).start()
+    Timer(0.0001, main).start()
 
 main()
 
