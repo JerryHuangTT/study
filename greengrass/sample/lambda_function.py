@@ -1,31 +1,30 @@
-import logging
-import sys
+from threading import Timer
 
-import greengrasssdk
-from threading import Thread
+import stream_sensor_producer
 import uart
-import json
-import time
-# Setup logging to stdout
-logger = logging.getLogger(__name__)
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-client = greengrasssdk.client("iot-data")
-'''
-def main():
-    while True:
-        try:
-            if uart.open():
-                rx_str = uart.get()
-            if rx_str:
-                rx_str = json.dumps({'rx':rx_str})
-                #client.publish(topic="hello/sample",queueFullPolicy="AllOrException",payload=rx_str)
-        except Exception as e:
-            logger.error("Failed to publish message: " + repr(e))
-        finally:
-            time.sleep(0.001)  
+from json import dumps
 
-th = Thread(target=main)
-th.start()
-'''
+record = []
+import time
+
+def main():
+    try:
+        uart.open()
+        res = uart.get()
+        if res:
+            global record
+            record.append(res)
+            if len(record) == 100:
+                aggregation_data = dumps(record)
+                #print(aggregation_data)
+                print(time.time())
+                stream_sensor_producer.main(aggregation_data)
+                record = []
+        Timer(0.016, main).start()       
+    except Exception as e:
+        print(e)
+        
+main()
+
 def lambda_handler(event, context):
     return
