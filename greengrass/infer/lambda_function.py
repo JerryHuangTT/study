@@ -6,11 +6,14 @@ def main():
     try:
         labels = []
         datas = stream_main()
-        for data in datas:
-            for a in loads(data.payload.decode()):
-                lable = ml_main(a)
-                print(lable)
-                labels.append(lable)
+        if datas:
+            for data in datas:
+                print(data.sequence_number)
+                for a in loads(data.payload.decode()):
+                    lable = ml_main([a])
+                    #print(lable)
+                    labels.append(lable)
+            print(labels)
     except Exception as e:
         print(e)
         pass

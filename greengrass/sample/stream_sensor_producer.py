@@ -14,8 +14,7 @@ def open():
     global client
     if not client:
         client = StreamManagerClient()
-        client.delete_message_stream(stream_name="StreamName")
-        client.delete_message_stream(stream_name="sensor")
+        #client.delete_message_stream(stream_name="sensor")
 
 def main(data):
     try:
@@ -33,7 +32,7 @@ def main(data):
             ))
         client.append_message(stream_name=stream_name, data=data.encode())
         stream_description = client.describe_message_stream(stream_name=stream_name)
-        print(stream_description)
+        print(stream_description.storage_status)
     except Exception as e:
         print(e)
         pass
