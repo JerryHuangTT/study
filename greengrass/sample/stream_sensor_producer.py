@@ -14,6 +14,8 @@ def open():
     global client
     if not client:
         client = StreamManagerClient()
+        client.delete_message_stream(stream_name="StreamName")
+        client.delete_message_stream(stream_name="sensor")
 
 def main(data):
     try:
@@ -24,7 +26,7 @@ def main(data):
                 name=stream_name,
                 max_size=268435456,  # Default is 256 MB.
                 stream_segment_size=16777216,  # Default is 16 MB.
-                time_to_live_millis=None,  # By default, no TTL is enabled.
+                time_to_live_millis=60000,  # By default, no TTL is enabled.
                 strategy_on_full=StrategyOnFull.OverwriteOldestData,  # Required.
                 persistence=Persistence.File,  # Default is File.
                 flush_on_write=False,  # Default is false.
