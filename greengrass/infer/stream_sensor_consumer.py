@@ -17,10 +17,10 @@ def main():
         stream_description = client.describe_message_stream(stream_name=stream_name)
         start_index = stream_description.storage_status.oldest_sequence_number
         end_index = stream_description.storage_status.newest_sequence_number
-        
+        new_bytes = stream_description.storage_status.total_bytes
         print(stream_description.storage_status)     
-        if end_index > start_index:
-            count = end_index - start_index
+        if new_bytes > 0 :#流中有可用数据
+            count = end_index - start_index + 1
             return client.read_messages(
                     stream_name=stream_name,
                     options=ReadMessagesOptions(
