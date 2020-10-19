@@ -8,9 +8,12 @@ def main():
         datas = stream_main()
         if datas:
             for data in datas:
-                print(data.sequence_number)
-                for a in loads(data.payload.decode()):
-                    lable = ml_main([a])
+                record = loads(data.payload.decode())
+                #一个记录100个传感器数据
+                for r in record:
+                    print(r[0])
+                    d = r[1:-1] #去掉第一个时间戳字段
+                    lable = ml_main([d])
                     #print(lable)
                     labels.append(lable)
             print(labels)

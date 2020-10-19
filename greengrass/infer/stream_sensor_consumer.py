@@ -22,7 +22,7 @@ def main():
             return client.read_messages(
                     stream_name=stream_name,
                     options=ReadMessagesOptions(
-                        desired_start_sequence_number=0,
+                        desired_start_sequence_number=start_index,
                         min_message_count=10,
                         max_message_count=15,
                         read_timeout_millis=0

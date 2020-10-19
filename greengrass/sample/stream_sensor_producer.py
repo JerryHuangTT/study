@@ -14,7 +14,7 @@ def open():
     global client
     if not client:
         client = StreamManagerClient()
-        #client.delete_message_stream(stream_name="sensor")
+        client.delete_message_stream(stream_name="sensor")
 
 def main(data):
     try:

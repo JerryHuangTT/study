@@ -1,5 +1,5 @@
 import serial
-
+import time
 ser = None
 
 def open():
@@ -20,6 +20,15 @@ def send(tx_str):
 def parse(buf):
     try:
         if buf.count(',') == 5:
-            return [float(i) for i in buf.split(',')]       
+            data = [float(i) for i in buf.split(',')]
+            data.insert(0,int(time.time() * 1000))
+            print(data)
+            return data
     except Exception as e:
         return
+'''
+import datetime
+n = int(time.time() * 1000)
+t = datetime.datetime.fromtimestamp(n/1000)
+print(t)
+'''
