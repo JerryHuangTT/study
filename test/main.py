@@ -1,3 +1,6 @@
+a= [1,2,3,4]
+print(a[1:])  
+
 import threading
 import time
 import sql1,sql2

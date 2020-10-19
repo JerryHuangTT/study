@@ -12,7 +12,7 @@ def main():
                 #一个记录100个传感器数据
                 for r in record:
                     print(r[0])
-                    d = r[1:-1] #去掉第一个时间戳字段
+                    d = r[1:] #去掉第一个时间戳字段
                     lable = ml_main([d])
                     #print(lable)
                     labels.append(lable)

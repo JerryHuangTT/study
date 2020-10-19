@@ -22,7 +22,6 @@ def parse(buf):
         if buf.count(',') == 5:
             data = [float(i) for i in buf.split(',')]
             data.insert(0,int(time.time() * 1000))
-            print(data)
             return data
     except Exception as e:
         return
