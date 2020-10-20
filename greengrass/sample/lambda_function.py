@@ -10,6 +10,7 @@ import time
 def main():
     try:
         uart.open()
+        stream_sensor_producer.open()
         res = uart.get()
         if res:
             global record
@@ -18,7 +19,7 @@ def main():
                 aggregation_data = dumps(record)
                 #print(aggregation_data)
                 print(time.time())
-                stream_sensor_producer.main(aggregation_data)
+                stream_sensor_producer.write(aggregation_data)
                 record = []
         Timer(0.016, main).start()       
     except Exception as e:

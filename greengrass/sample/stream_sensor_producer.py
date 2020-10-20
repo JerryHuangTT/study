@@ -14,12 +14,12 @@ def open():
     global client
     if not client:
         client = StreamManagerClient()
+        print('delete')
+        client.delete_message_stream(stream_name=stream_name)
         create_stream()
-        #client.delete_message_stream(stream_name="sensor")
 
-def main(data):
+def write(data):
     try:
-        open()
         client.append_message(stream_name=stream_name, data=data.encode())
         stream_description = client.describe_message_stream(stream_name=stream_name)
         print(stream_description.storage_status)
