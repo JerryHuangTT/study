@@ -1,5 +1,5 @@
 from threading import Timer
-from  load_lite import main as ml_main
+from load_lite import main as ml_main
 from stream_sensor_consumer import main as stream_main
 from json import loads
 def main():
