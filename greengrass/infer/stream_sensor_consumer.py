@@ -35,8 +35,8 @@ def open_client():
             client.delete_message_stream(stream_name=stream_infer)
         if stream_export in stream_names:    
             client.delete_message_stream(stream_name=stream_export)
-        create_infer()
         create_export()
+        create_infer()
 
 def read_sensor():
     global last_index
@@ -90,23 +90,17 @@ def create_infer():
         export_definition=exports
     ))
 
-file_path = "/tmp"
+file_path = "file:/tmp/jerry.txt"
 def write_infer(data):
     try:
-        '''
-        client.append_message(stream_name=stream_infer, data=data.encode())
-        stream_description = client.describe_message_stream(stream_name=stream_infer)
-        print(stream_description.storage_status)
-        '''
         s3_export_task_definition = S3ExportTaskDefinition(input_url=file_path, bucket="allenyangtest", key="jerry/data.txt")
-        sequence_number = client.append_message(stream_name=stream_infer, data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
-        print('export {}'.format(sequence_number))
-        
+        client.append_message(stream_name=stream_infer, data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
+
         read_export()
-        '''
-        stream_description = client.describe_message_stream(stream_name=stream_export)
-        print(stream_description)
-        '''
+        messages_list = client.read_messages(
+            stream_infer, ReadMessagesOptions(min_message_count=1)
+        )
+        print(messages_list)
     except Exception as e:
         print(e)
         pass
@@ -122,7 +116,7 @@ def create_export():
 def read_export():
     try:
         messages_list = client.read_messages(
-            stream_export, ReadMessagesOptions(min_message_count=1, read_timeout_millis=1000)
+            stream_export, ReadMessagesOptions(min_message_count=1)
         )
         print(messages_list)
     except Exception as e:
