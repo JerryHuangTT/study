@@ -13,7 +13,7 @@ from greengrasssdk.stream_manager import (
 stream_sensor = 'sensor'
 stream_infer = 'infer'
 client = None
-last_index = 0
+last_index = -1
 
 def open():
     global client
@@ -31,11 +31,12 @@ def read():
         print(stream_description.storage_status)
         print(last_index)  
         if end_index > last_index :#流中有可用数据
-            count = end_index - last_index + 1
+            count = end_index - last_index
+            print(count)
             data = client.read_messages(
                 stream_name=stream_sensor,
                 options=ReadMessagesOptions(
-                    desired_start_sequence_number=last_index,
+                    desired_start_sequence_number=last_index + 1,
                     min_message_count=count,
                     max_message_count=3000,
                     read_timeout_millis=0
@@ -72,11 +73,12 @@ import json
 
 def write(data):
     try:
+        '''
         client.append_message(stream_name=stream_infer, data=data.encode())
         stream_description = client.describe_message_stream(stream_name=stream_infer)
         print(stream_description.storage_status)
-        
-        s3_export_task_definition = S3ExportTaskDefinition(input_url="/tmp", bucket="allenyangtest", key="jerry/data.txt")
+        '''
+        s3_export_task_definition = S3ExportTaskDefinition(input_url="/tmp/jerry.txt", bucket="allenyangtest", key="jerry/data.txt")
         sequence_number = client.append_message(stream_name=stream_sensor, data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
         print('export {}'.format(sequence_number))
     except Exception as e:

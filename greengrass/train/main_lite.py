@@ -2,7 +2,15 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 from imblearn.over_sampling import SMOTE
-
+'''
+a = np.array([['a','a','a',2],
+    ['b','a','a',1],
+    ['c','a','a',3],
+    ['d','a','a',4],
+])
+b = tf.keras.utils.to_categorical(a[:,3])
+print(b)
+'''
 num_class = 0
 num_feature = 0
 
