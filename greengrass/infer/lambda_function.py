@@ -1,12 +1,12 @@
 from threading import Timer
 from load_lite import main as ml_main
-from stream_sensor_consumer import read,write
+from stream_sensor_consumer import read_sensor,write_infer
 from json import loads,dumps
 
 def main():
     try:
         labels = []
-        datas = read()
+        datas = read_sensor()
         if datas:
             for data in datas:
                 record = loads(data.payload.decode())
@@ -18,7 +18,7 @@ def main():
                     #print(lable)
                     labels.append(lable)
             print(labels)
-            write(dumps(labels))
+            write_infer(dumps(labels))
     except Exception as e:
         print(e)
         pass

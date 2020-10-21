@@ -14,8 +14,10 @@ def open():
     global client
     if not client:
         client = StreamManagerClient()
-        print('delete')
-        client.delete_message_stream(stream_name=stream_name)
+        stream_names = client.list_streams()
+        if stream_name in stream_names:
+            print('delete sensor stream')
+            client.delete_message_stream(stream_name=stream_name)
         create_stream()
 
 def write(data):
