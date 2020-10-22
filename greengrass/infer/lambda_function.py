@@ -14,7 +14,8 @@ def main():
             for msg in msgs:
                 for r in loads(msg.payload.decode()):#一个消息包含多条记录
                     lable = ml_main([r[1:]])#去掉第一个时间戳字段、合成二维数组，运行推理模型
-                    res.append(r.append(lable))
+                    r.append(lable)
+                    res.append(r)
             sql.insert(res)
     except Exception as e:
         print(e)

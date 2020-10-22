@@ -15,7 +15,7 @@ def main():
         if res:
             global record
             record.append(res)
-            if len(record) == 10:
+            if len(record) == 100:
                 aggregation_data = dumps(record)
                 #print(aggregation_data)
                 print(time.time())
