@@ -13,7 +13,7 @@ def select():
     cur.execute(sql)
     print('start to read')
     data = cur.fetchall()
-    print('rows:'.format(len(data)))
+    print('rows:{}'.format(len(data)))
     df = pd.DataFrame(columns=['timestamp','x1','x2','y1','y2','z1','z2','type'],
                                 data=data)
     print('start to save')

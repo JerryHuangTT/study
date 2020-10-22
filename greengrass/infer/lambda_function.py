@@ -1,13 +1,14 @@
 from threading import Timer
 from load_lite import main as ml_main
-from stream_sensor_consumer import read_sensor,write_infer
-from json import loads,dumps
+from stream_sensor import read_sensor
+from stream_infer import write_infer
+from json import loads
 
-import sql
+#import sql
 
 def main():
     try:
-        sql.connect()
+        #sql.connect()
         res = []
         msgs = read_sensor()#从流中读出多个消息
         if msgs:
@@ -16,7 +17,8 @@ def main():
                     lable = ml_main([r[1:]])#去掉第一个时间戳字段、合成二维数组，运行推理模型
                     r.append(lable)
                     res.append(r)
-            sql.insert(res)
+            #sql.insert(res)
+            write_infer(res)
     except Exception as e:
         print(e)
         pass
