@@ -22,5 +22,11 @@ Resources:
       CodeUri: infer/
       Handler: lambda_function.lambda_handler
       Role: arn:aws-cn:iam::965691253049:role/sh_pentair_develop_role
+  export:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: export/
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws-cn:iam::965691253049:role/sh_pentair_develop_role      
 
 # s3 shpentairdevelop gg
