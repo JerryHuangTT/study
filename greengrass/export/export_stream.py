@@ -17,6 +17,7 @@ def open_client():
     global client
     if not client:
         client = StreamManagerClient()
+        #client.delete_message_stream('infer')
         client.delete_message_stream(stream_export)
 
 def create_export():
