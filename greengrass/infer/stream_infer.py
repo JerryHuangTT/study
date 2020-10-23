@@ -12,12 +12,11 @@ def open_client():
     global client
     if not client:
         client = StreamManagerClient()
-        stream_names = client.list_streams()
-        if stream_infer in stream_names:
-            client.delete_message_stream(stream_name=stream_infer)
-        create_infer()
 
 def create_infer():
+    stream_names = client.list_streams()
+    if stream_infer not in stream_names:
+        create_infer()
     client.create_message_stream(MessageStreamDefinition(
         name=stream_infer,
         max_size=536870912,  # 512 MB.
@@ -31,9 +30,10 @@ def create_infer():
 def write_infer(data):
     try:
         open_client()
+        create_infer()
         client.append_message(stream_name=stream_infer, data=data.encode())
         stream_description = client.describe_message_stream(stream_name=stream_infer)
         print(stream_description.storage_status)
     except Exception as e:
         print(e)
-        pass    
+        pass

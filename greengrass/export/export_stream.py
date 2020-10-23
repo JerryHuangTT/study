@@ -17,11 +17,12 @@ def open_client():
     global client
     if not client:
         client = StreamManagerClient()
-        stream_names = client.list_streams()
-        if stream_export not in stream_names:
-            create_export()
+        #client.delete_message_stream(stream_export)
 
 def create_export():
+    stream_names = client.list_streams()
+    if stream_export not in stream_names:
+        create_export()
     exports = ExportDefinition(
         s3_task_executor=[
             S3ExportTaskExecutorConfig(
@@ -40,11 +41,13 @@ def create_export():
         export_definition=exports
     ))
 
-file_path = "file:/tmp/data.csv"
-def export_file_tos3(data):
+def export_file_tos3():
     try:
-        s3_export_task_definition = S3ExportTaskDefinition(input_url=file_path, bucket="allenyangtest", key="jerry/data.csv")
-        client.append_message(stream_name=stream_export, data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
+        s3_export_task_definition = S3ExportTaskDefinition(input_url="file:/tmp/data.csv",
+                            bucket="allenyangtest",
+                            key="jerry/data.csv")
+        client.append_message(stream_name=stream_export, 
+                        data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
     except Exception as e:
         print(e)
         pass
@@ -52,19 +55,40 @@ def export_file_tos3(data):
 stream_infer = 'infer'
 def read_infer():
     try:
-        open_client()
+        create_export()
         stream_description = client.describe_message_stream(stream_name=stream_infer)
         print(stream_description.storage_status)
-        #print(stream_description.storage_status.newest_sequence_number)
-        data = client.read_messages(
+        print('start to read')
+        msgs = client.read_messages(
             stream_name=stream_infer,
             options=ReadMessagesOptions(
                 desired_start_sequence_number=0,
-                min_message_count=1,
-                max_message_count=1,#100000,
+                min_message_count=stream_description.storage_status.newest_sequence_number,
+                max_message_count=100000,
                 read_timeout_millis=0
                 ))
-        print(data)        
-        return data
+        print('finish read')
+        save(parse(msgs))
+        print('finish parse')
+        export_file_tos3()
     except Exception as e:
         print(e)
+
+from json import loads
+import pandas as pd
+def parse(msgs):
+    rows = []
+    for msg in msgs:
+        record = loads(msg.payload.decode())
+        for data in record:
+            rows.append(data)
+    print(len(rows))
+    return rows
+
+def save(data):
+    print('start to save to csv')
+    df = pd.DataFrame(columns=['timestamp','x1','x2','y1','y2','z1','z2','type'],
+                                data=data)
+    df.to_csv('/tmp/data.csv',index=False)
+    print('finish save')
+    #client.delete_message_stream(stream_infer)
