@@ -1,4 +1,3 @@
-
 from greengrasssdk.stream_manager import (
     StreamManagerClient,
     MessageStreamDefinition,
@@ -8,6 +7,7 @@ from greengrasssdk.stream_manager import (
     Util,
     ExportDefinition,
     S3ExportTaskExecutorConfig,
+    ReadMessagesOptions
 )
 
 stream_export = 'export'
@@ -48,3 +48,23 @@ def export_file_tos3(data):
     except Exception as e:
         print(e)
         pass
+
+stream_infer = 'infer'
+def read_infer():
+    try:
+        open_client()
+        stream_description = client.describe_message_stream(stream_name=stream_infer)
+        print(stream_description.storage_status)
+        #print(stream_description.storage_status.newest_sequence_number)
+        data = client.read_messages(
+            stream_name=stream_infer,
+            options=ReadMessagesOptions(
+                desired_start_sequence_number=0,
+                min_message_count=1,
+                max_message_count=1,#100000,
+                read_timeout_millis=0
+                ))
+        print(data)        
+        return data
+    except Exception as e:
+        print(e)

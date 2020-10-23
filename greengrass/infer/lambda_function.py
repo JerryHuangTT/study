@@ -2,7 +2,7 @@ from threading import Timer
 from load_lite import main as ml_main
 from stream_sensor import read_sensor
 from stream_infer import write_infer
-from json import loads
+from json import loads,dumps
 
 #import sql
 
@@ -18,7 +18,7 @@ def main():
                     r.append(lable)
                     res.append(r)
             #sql.insert(res)
-            write_infer(res)
+            write_infer(dumps(res))
     except Exception as e:
         print(e)
         pass

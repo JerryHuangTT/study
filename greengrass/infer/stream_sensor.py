@@ -1,8 +1,3 @@
-'''
-with open('1.txt','a') as f:
-    print(f)
-    f.write('\nsfd')
-'''
 from greengrasssdk.stream_manager import (
     ReadMessagesOptions,
     StreamManagerClient,
@@ -45,7 +40,6 @@ def read_sensor():
         stream_description = client.describe_message_stream(stream_name=stream_sensor)
         end_index = stream_description.storage_status.newest_sequence_number
         print(stream_description.storage_status)
-        print(last_index)  
         if end_index > last_index :#流中有可用数据
             count = end_index - last_index
             print(count)
@@ -58,7 +52,6 @@ def read_sensor():
                     read_timeout_millis=0
                     ))
             last_index = end_index
-            print(last_index)
             return data
     except Exception as e:
         print(e)
