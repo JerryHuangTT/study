@@ -17,12 +17,12 @@ def open_client():
     global client
     if not client:
         client = StreamManagerClient()
-        #client.delete_message_stream(stream_export)
+        client.delete_message_stream(stream_export)
 
 def create_export():
     stream_names = client.list_streams()
-    if stream_export not in stream_names:
-        create_export()
+    if stream_export in stream_names:
+        client.delete_message_stream(stream_export)
     exports = ExportDefinition(
         s3_task_executor=[
             S3ExportTaskExecutorConfig(
@@ -32,8 +32,8 @@ def create_export():
     )
     client.create_message_stream(MessageStreamDefinition(
         name=stream_export,
-        max_size=536870912,  # 512 MB.
-        stream_segment_size=33554432,  # 32 MB.
+        max_size=53687091,  # 51 MB.
+        stream_segment_size=3355443,  # 3 MB.
         time_to_live_millis=None,  # By default, no TTL is enabled.
         strategy_on_full=StrategyOnFull.OverwriteOldestData,  # Required.
         persistence=Persistence.File,  # Default is File.
@@ -45,7 +45,7 @@ def export_file_tos3():
     try:
         s3_export_task_definition = S3ExportTaskDefinition(input_url="file:/tmp/data.csv",
                             bucket="allenyangtest",
-                            key="jerry/data.csv")
+                            key='jerry/{}.csv'.format(get_time()))
         client.append_message(stream_name=stream_export, 
                         data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
     except Exception as e:
@@ -92,3 +92,7 @@ def save(data):
     df.to_csv('/tmp/data.csv',index=False)
     print('finish save')
     #client.delete_message_stream(stream_infer)
+
+def get_time():
+    import time
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
