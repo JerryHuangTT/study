@@ -16,6 +16,7 @@ def open_client():
 def create_infer():
     stream_names = client.list_streams()
     if stream_infer not in stream_names:
+        print('recreate infer because of exporting delete')
         client.create_message_stream(MessageStreamDefinition(
             name=stream_infer,
             max_size=536870912,  # 512 MB.

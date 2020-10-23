@@ -15,7 +15,7 @@ def main():
     except Exception as e:
         print(e)
         pass
-    Timer(180, main).start()
+    Timer(3600, main).start()#86400
 
 main()
 

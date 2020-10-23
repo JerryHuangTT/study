@@ -45,7 +45,7 @@ def export_file_tos3():
     try:
         s3_export_task_definition = S3ExportTaskDefinition(input_url="file:/tmp/data.csv",
                             bucket="allenyangtest",
-                            key='jerry/{}.csv'.format(get_time()))
+                            key='jerry/pump/{}.csv'.format(get_time()))
         client.append_message(stream_name=stream_export, 
                         data=Util.validate_and_serialize_to_json_bytes(s3_export_task_definition))
     except Exception as e:
@@ -91,8 +91,10 @@ def save(data):
                                 data=data)
     df.to_csv('/tmp/data.csv',index=False)
     print('finish save')
-    #client.delete_message_stream(stream_infer)
+    client.delete_message_stream(stream_infer)
 
 def get_time():
     import time
-    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    t = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+    print(t)
+    return t
