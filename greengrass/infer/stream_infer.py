@@ -30,8 +30,11 @@ def create_infer():
 def write_infer(data):
     try:
         open_client()
+        print('check if infer has been deleted: listing stream')
         create_infer()
+        print('start to append infer')
         client.append_message(stream_name=stream_infer, data=data.encode())
+        print('start to read infer status')
         stream_description = client.describe_message_stream(stream_name=stream_infer)
         print(stream_description.storage_status)
     except Exception as e:

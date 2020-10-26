@@ -17,7 +17,7 @@ def open_client():
     global client
     if not client:
         client = StreamManagerClient()
-        #client.delete_message_stream('infer')
+        print('start to delete export because of restart')
         client.delete_message_stream(stream_export)
 
 def create_export():
@@ -58,8 +58,8 @@ def read_infer():
     try:
         create_export()
         stream_description = client.describe_message_stream(stream_name=stream_infer)
+        print('start to read infer')
         print(stream_description.storage_status)
-        print('start to read')
         msgs = client.read_messages(
             stream_name=stream_infer,
             options=ReadMessagesOptions(
@@ -91,7 +91,7 @@ def save(data):
     df = pd.DataFrame(columns=['timestamp','x1','x2','y1','y2','z1','z2','type'],
                                 data=data)
     df.to_csv('/tmp/data.csv',index=False)
-    print('finish save')
+    print('finish save and start to delete infer')
     client.delete_message_stream(stream_infer)
 
 def get_time():

@@ -16,12 +16,13 @@ def read_sensor():
     global last_index
     try:
         open_client()
+        print('start to read sensor status')
         stream_description = client.describe_message_stream(stream_name=stream_sensor)
         end_index = stream_description.storage_status.newest_sequence_number
         print(stream_description.storage_status)
         if end_index > last_index :#流中有可用数据
             count = end_index - last_index
-            print(count)
+            print('start to read sensor count:{}'.format(count))
             data = client.read_messages(
                 stream_name=stream_sensor,
                 options=ReadMessagesOptions(
