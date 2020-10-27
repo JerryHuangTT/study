@@ -5,8 +5,10 @@ from stream_infer import write_infer
 from json import loads,dumps
 #import sql
 
-import greengrasssdk
-                        
+import uuid
+mac = uuid.UUID(int = uuid.getnode()).hex[-12:].upper()
+
+import greengrasssdk          
 client = greengrasssdk.client('iot-data')
 
 def main():
@@ -24,18 +26,19 @@ def main():
                     r.append(lable)
                     res.append(r)
             #sql.insert(res)
+            print(res[0])
             write_infer(dumps(res))
             tag = True
             if t_count / len(res) < 0.9:
                 tag = False
-            send_2iot({'device_id':'123','tag':tag})
+                
+            send_2iot({'mac':mac,'tag':tag})
     except Exception as e:
         print(e)
         pass
     Timer(30, main).start()
 
 main()
-
 
 def send_2iot(data):
     client.publish(

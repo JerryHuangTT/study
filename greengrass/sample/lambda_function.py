@@ -18,7 +18,7 @@ def main():
             if len(record) == 100:
                 aggregation_data = dumps(record)
                 #print(aggregation_data)
-                print(time.time())
+                #print(time.time())
                 stream_sensor_producer.write(aggregation_data)
                 record = []
         Timer(0.016, main).start()       
