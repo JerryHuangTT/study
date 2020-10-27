@@ -23,7 +23,7 @@ class Cdevice(Resource):
         body = request.json
         return {'para': para,'body':body}
 
-api.add_resource(Cuser, '/user/<string:para>')
+api.add_resource(Cuser, '/user/test/<string:para>')
 api.add_resource(Cdevice, '/device/<string:para>')
 CORS(app, supports_credentials=True)
 
