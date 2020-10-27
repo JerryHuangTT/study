@@ -1,21 +1,20 @@
 from threading import Timer
-from export_stream import open_client,read_infer#,export_file_tos3
-'''
-from sql import select,connect
-import sql
-connect()
-select()
-'''
+from export_stream import open_client,read_infer
+import schedule
+
+def job():
+    open_client()
+    read_infer()
+
+schedule.every().day.at("03:00").do(job)
 
 def main():
     try:
-        open_client()
-        read_infer()
-        #export_file_tos3()
+        schedule.run_pending()
     except Exception as e:
         print(e)
         pass
-    Timer(86400, main).start()#86400
+    Timer(5, main).start()
 
 main()
 
