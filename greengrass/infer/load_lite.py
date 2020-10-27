@@ -3,7 +3,7 @@ import numpy as np
 
 def main(data):
     input_data = np.array(data,dtype=np.float32)
-    interpreter = tflite.Interpreter(model_path="tflite_no_smote_no_normal.tflite")
+    interpreter = tflite.Interpreter(model_path="/pump/tflite_no_smote_no_normal.tflite")
     interpreter.allocate_tensors()
 
     input_details = interpreter.get_input_details()
