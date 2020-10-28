@@ -5,6 +5,7 @@
 
 mysql
 flask
-restful API
+flask-restful
+flask-cors
 schedule
 gevent
