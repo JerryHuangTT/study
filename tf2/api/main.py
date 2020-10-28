@@ -17,7 +17,7 @@ class Cuser(Resource):
 class Cdevice(Resource):
     def get(self, para):
         body = request.json
-        return {'para': para,'body':body}
+        return {'data': [[1603825263714, 0.221930568, -0.21332435, 0.268806992, 0.041505167, 1.063264714, 1.032013765, 0]],'body':body}
 
     def put(self, para):
         body = request.json

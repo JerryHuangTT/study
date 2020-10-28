@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
-from get_sensor import read_sensor
+from get_infer import read_sensor
 
 app = Flask('jerry')
 api = Api(app)
@@ -16,9 +16,9 @@ class Vuser(Resource):
 
 class Vdevice(Resource):
     def get(self):
-        data = read_sensor(request.args.get('count'),
-                            request.args.get('index'))
-        return {'msg':'','code':0,'data':data}
+        data = read_sensor(int(request.args.get('index')),
+                            int(request.args.get('count')))                     
+        return {'msg':'', 'code':len(data), 'data':data}
 
     def put(self, para):
         body = request.json
@@ -29,7 +29,7 @@ api.add_resource(Vdevice, '/device/jerry')
 CORS(app, supports_credentials=True)
 
 #https://127.0.0.1:8090/device/jerry?index=1&count=50
-app.run(debug=True, 
+app.run(debug=False, 
         host='0.0.0.0', 
         port=8090,
         ssl_context='adhoc')
