@@ -1,0 +1,2 @@
+pymemcache
+elasticache-auto-discovery

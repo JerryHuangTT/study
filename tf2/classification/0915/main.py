@@ -16,7 +16,7 @@ num_feature = 0
 
 def load_data():
     global num_class,num_feature
-    data = pd.read_csv('pump.csv')
+    data = pd.read_csv(r'tf2\classification\0915\pump.csv')
     print(data['type'].value_counts())
     num_class = data['type'].value_counts().shape[0]
     train_data = data.sample(frac=0.7,random_state=None)

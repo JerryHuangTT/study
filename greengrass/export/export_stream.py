@@ -68,6 +68,9 @@ def read_infer():
                 max_message_count=100000,
                 read_timeout_millis=0
                 ))
+        if not msgs:
+            print('no infer msgs')
+            return
         print('finish read')
         save(parse(msgs))
         print('finish parse')

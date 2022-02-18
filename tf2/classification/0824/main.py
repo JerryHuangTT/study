@@ -29,7 +29,7 @@ def load_data():
 def parse_data():
     train_data,test_data = load_data()
     n = num_feature
-    x_train = preprocessing.scale(train_data[:,0:n])
+    
     y_train = np.float32(tf.keras.utils.to_categorical(train_data[:,n],num_class))
     x_test = preprocessing.scale(test_data[:,0:n])
     y_test =  np.float32(tf.keras.utils.to_categorical(test_data[:,n],num_class))
